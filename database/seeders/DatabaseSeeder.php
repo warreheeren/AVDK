@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
                 'away_team_id' => $awayTeam->id,
                 'home_score' => rand(0, 5),
                 'away_score' => rand(0, 5),
-                'match_date' => now()->addDays($index * 3),
+                'match_date' => now()->subDays(21 - $index * 3),
                 'location' => $homeTeam->address,
             ]);
         }

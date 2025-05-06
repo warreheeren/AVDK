@@ -1,13 +1,18 @@
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { InertiaProgress } from '@inertiajs/progress';
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue'
 import '../css/app.css';
 
 createInertiaApp({
-    resolve: name => import(`./Pages/${name}.vue`), // Dynamische import
-    setup({ el, App, props }) {
-        return createApp({ render: () => h(App, props) }).mount(el);
+    resolve: async name => {
+        const pages = import.meta.glob('./Pages/**/*.vue')
+        const page = await pages[`./Pages/${name}.vue`]()
+        page.default.layout ??= AppLayout
+        return page
     },
-});
-
-InertiaProgress.init();
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mount(el)
+    },
+})

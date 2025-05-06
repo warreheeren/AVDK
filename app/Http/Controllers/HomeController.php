@@ -11,7 +11,11 @@ class HomeController extends Controller
     {
         return Inertia::render('Home', [
             'divisions' => Division::with('teams')->get(),
-            'matches' => Game::with(['homeTeam', 'awayTeam'])->orderBy('match_date', 'desc')->take(10)->get(),
+            'matches' => Game::with(['homeTeam.division', 'awayTeam.division']) 
+                ->where('match_date', '<=', now())
+                ->orderBy('match_date', 'desc')
+                ->take(50)
+                ->get(),
         ]);
     }
 }
