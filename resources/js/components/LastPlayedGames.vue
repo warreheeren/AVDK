@@ -47,8 +47,6 @@ export default {
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    max-width: 700px;
-    margin: 0 auto;
     margin-bottom: 1rem;
 }
 

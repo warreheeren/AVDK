@@ -22,12 +22,15 @@ export default {
     },
     data() {
         return {
-            localSelectedDate: this.selectedDate
+            localSelectedDate: this.uniqueMatchDates.length > 0 ? this.uniqueMatchDates[0] : null
         };
     },
     watch: {
         localSelectedDate(newVal) {
             this.$emit('update:selectedDate', newVal);
+        },
+        selectedDate(newVal) {
+            this.localSelectedDate = newVal;
         }
     },
     methods: {

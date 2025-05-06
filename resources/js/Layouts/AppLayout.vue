@@ -38,9 +38,9 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 20px 20px;
+    padding: 10px 20px;
     background-color: #fff;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid #f0f0f0;
     font-family: Arial, sans-serif;
 }
 
