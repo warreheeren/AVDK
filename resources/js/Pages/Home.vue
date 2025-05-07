@@ -9,44 +9,47 @@
                     @update:selectedDate="selectedDate = $event" />
 
                 <LastPlayedGames :matches="filteredMatches" :division="filteredDivisions[0]" />
+            </div>
 
+            <!-- Standings Section -->
+            <div class="standings">
                 <section>
                     <div class="stand">
                         <div v-for="division in filteredDivisions" :key="division.id"
-                            class="bg-white border rounded-2xl shadow-sm p-5 hover:shadow-md transition">
-                            <p class="font-semibold text-gray-900">Tussenstand: {{ division.name }}</p>
+                            class="bg-white border rounded-2xl shadow-lg p-5 hover:shadow-xl transition">
+                            <p class="font-semibold text-gray-900 text-lg">Tussenstand: {{ division.name }}</p>
 
-                            <table class="w-full mt-4 text-left">
-                                <thead>
-                                    <tr class="border-b">
-                                        <th class="py-2">#</th>
-                                        <th class="py-2">Team</th>
-                                        <th class="py-2">M</th>
-                                        <th class="py-2">W</th>
-                                        <th class="py-2">G</th>
-                                        <th class="py-2">V</th>
-                                        <th class="py-2">+/-</th>
-                                        <th class="py-2">P</th>
+                            <table class="w-full mt-6 text-left">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="py-3 px-4 text-sm text-gray-600">#</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">Team</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">M</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">W</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">G</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">V</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">+/-</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600">P</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(team, index) in props.standings[division.id] || []" :key="team.id"
-                                        class="border-b">
-                                        <td class="py-2">{{ index + 1 }}</td>
-                                        <td class="py-2">
-                                            <div class="flex items-center">
-                                                <img :src="team.logo" alt="Team Logo" class="w-6 h-6 mr-2" />
-                                                <Link :href="`/teams/${team.id}`" class="team-name">
-                                                {{ team.name }}
+                                        class="border-b transition-all hover:bg-gray-50">
+                                        <td class="py-3 px-4">{{ index + 1 }}</td>
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center space-x-2">
+                                                <img :src="team.logo" alt="Team Logo" class="w-8 h-8 rounded-full border border-gray-300" />
+                                                <Link :href="`/teams/${team.id}`" class="team-name text-blue-600 hover:underline">
+                                                    {{ team.name }}
                                                 </Link>
                                             </div>
                                         </td>
-                                        <td class="py-2">{{ team.matches }}</td>
-                                        <td class="py-2">{{ team.wins }}</td>
-                                        <td class="py-2">{{ team.draws }}</td>
-                                        <td class="py-2">{{ team.losses }}</td>
-                                        <td class="py-2">{{ team.goalDifference }}</td>
-                                        <td class="py-2">{{ team.points }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.matches }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.wins }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.draws }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.losses }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.goalDifference }}</td>
+                                        <td class="py-3 px-4 text-center">{{ team.points }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,15 +117,15 @@ const filteredMatches = computed(() => {
 .main-container {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    max-width: 1200px;
+    gap: 1rem;
     margin: 0 auto;
     padding: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .sidebar {
-    margin-left: -250px;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     flex-shrink: 0;
 }
 
@@ -131,6 +134,11 @@ const filteredMatches = computed(() => {
     max-width: 700px;
     display: flex;
     flex-direction: column;
+}
+
+.standings {
+    flex: 1;
+    max-width: 800px;
 }
 
 .bg-white {
@@ -145,12 +153,12 @@ const filteredMatches = computed(() => {
     border-radius: 1rem;
 }
 
-.shadow-sm {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+.shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-.shadow-md {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.shadow-xl {
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2);
 }
 
 .p-5 {
@@ -169,16 +177,8 @@ const filteredMatches = computed(() => {
     font-weight: 600;
 }
 
-.hover\:underline:hover {
-    text-decoration: underline;
-}
-
 .w-full {
     width: 100%;
-}
-
-.mt-4 {
-    margin-top: 1rem;
 }
 
 .mt-6 {
@@ -193,13 +193,14 @@ const filteredMatches = computed(() => {
     border-bottom: 1px solid #e5e7eb;
 }
 
-.py-2 {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+.py-3 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
-.mr-2 {
-    margin-right: 0.5rem;
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .flex {
@@ -210,18 +211,47 @@ const filteredMatches = computed(() => {
     align-items: center;
 }
 
-.stand {
-    margin: 0 auto;
-    max-width: 700px;
+.space-x-2 {
+    margin-right: 0.5rem;
 }
+
+.rounded-full {
+    border-radius: 50%;
+}
+
+.hover\:underline:hover {
+    text-decoration: underline;
+}
+
 .team-name {
     font-size: 1rem;
+    font-weight: 500;
 }
-.border-b:hover {
+
+.bg-gray-100 {
     background-color: #f3f4f6;
-    border-radius: 0.375rem;
-    padding: 0.5rem;
-    transition: background-color 0.3s;
-    cursor: pointer;
+}
+
+.hover\:bg-gray-50:hover {
+    background-color: #f9fafb;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .standings {
+        max-width: 100%;
+    }
 }
 </style>
