@@ -19,4 +19,8 @@ class Game extends Model
     public function awayTeam() {
         return $this->belongsTo(Team::class, 'away_team_id');
     }
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 }

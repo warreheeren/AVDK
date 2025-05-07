@@ -2,6 +2,8 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import '../css/app.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 
 createInertiaApp({
     resolve: async name => {

@@ -4,30 +4,33 @@
 
         <ul v-if="matches.length">
             <li v-for="match in matches" :key="match.id" class="match-item">
-                <div class="team">
-                    <img :src="match.home_team.logo" alt="Home Team Logo" class="team-logo" />
-                    <span class="team-name">{{ match.home_team.name }}</span>
-                </div>
+                <Link :href="`/games/${match.id}`" class="flex w-full no-underline text-inherit">
+                    <div class="team">
+                        <img :src="match.home_team.logo" alt="Home Team Logo" class="team-logo" />
+                        <span class="team-name">{{ match.home_team.name }}</span>
+                    </div>
 
-                <div class="score">
-                    <span class="score-number">{{ match.home_score }}</span>
-                    <span class="separator">-</span>
-                    <span class="score-number">{{ match.away_score }}</span>
-                </div>
+                    <div class="score">
+                        <span class="score-number">{{ match.home_score }}</span>
+                        <span class="separator">-</span>
+                        <span class="score-number">{{ match.away_score }}</span>
+                    </div>
 
-                <div class="team">
-                    <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
-                    <span class="team-name">{{ match.away_team.name }}</span>
-                </div>
+                    <div class="team">
+                        <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
+                        <span class="team-name">{{ match.away_team.name }}</span>
+                    </div>
+                 </Link>
             </li>
         </ul>
-
         <p v-else class="text-gray-500">Er zijn geen wedstrijden op deze datum.</p>
     </div>
 </template>
 
 <script>
+import { Link } from '@inertiajs/vue3';
 export default {
+    components: { Link },
     props: {
         matches: {
             type: Array,
@@ -37,7 +40,11 @@ export default {
             type: Object,
             required: true,
         }
-    }
+    },
+    mounted() {
+    console.log('Matches:', this.matches);
+    console.log('Division:', this.division);
+  },
 };
 </script>
 
@@ -108,5 +115,10 @@ export default {
 
 .text-gray-500 {
     color: #a0aec0;
+}
+
+.last-played-games li:hover {
+    background-color: rgb(233, 233, 233);
+    transition: background-color 0.2s;
 }
 </style>

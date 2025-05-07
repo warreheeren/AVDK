@@ -1,20 +1,25 @@
 <template>
-    <div v-if="match && match.home_team && match.away_team" class="p-6 space-y-6">
-        <h1 class="text-3xl font-bold">
-            {{ match.home_team.name }} vs {{ match.away_team.name }}
-        </h1>
-        <div class="text-xl">
-            <span>{{ match.home_score }} - {{ match.away_score }}</span>
-        </div>
-        <p class="text-gray-600">Datum: {{ match.match_date }}</p>
-        <p class="text-gray-600">Locatie: {{ match.location }}</p>
-    </div>
-
-    <div v-else class="p-6 text-red-600">
-        Wedstrijdgegevens niet beschikbaar.
-    </div>
+  <div>
+    <GameDetailCard :game="game" :divisions="divisions" />
+  </div>
 </template>
 
-<script setup>
-defineProps({ match: Object });
+<script>
+import GameDetailCard from '@/components/GameDetailCard.vue';
+
+export default {
+  components: {
+    GameDetailCard,
+  },
+  props: {
+    game: {
+      type: Object,
+      required: true,
+    },
+    divisions: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
