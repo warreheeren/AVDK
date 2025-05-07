@@ -22,7 +22,7 @@ export default {
     },
     data() {
         return {
-            localSelectedDate: this.uniqueMatchDates.length > 0 ? this.uniqueMatchDates[0] : null
+            localSelectedDate: this.selectedDate
         };
     },
     watch: {
@@ -31,6 +31,15 @@ export default {
         },
         selectedDate(newVal) {
             this.localSelectedDate = newVal;
+        },
+        uniqueMatchDates: {
+            handler(newDates) {
+                if (newDates.length > 0 && !newDates.includes(this.localSelectedDate)) {
+                    this.localSelectedDate = newDates[0];
+                    this.$emit('update:selectedDate', newDates[0]);
+                }
+            },
+            immediate: true
         }
     },
     methods: {
@@ -41,6 +50,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 option {

@@ -84,7 +84,6 @@ export default {
 .team-logo {
     width: 30px;
     height: 30px;
-    object-fit: cover;
     margin-bottom: 4px;
 }
 

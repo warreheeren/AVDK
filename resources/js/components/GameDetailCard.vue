@@ -34,7 +34,7 @@
 
     <div class="game-container">
       <div class="team home-team flex">
-        <p class="team-name">{{ game.home_team.name }}</p>
+        <p class="team-name">{{ truncateName(game.home_team.name)}}</p>
         <img :src="game.home_team.logo" alt="Home Team Logo" class="team-logo" />
       </div>
 
@@ -46,7 +46,7 @@
 
       <div class="team away-team">
         <img :src="game.away_team.logo" alt="Away Team Logo" class="team-logo" />
-        <span class="team-name">{{ game.away_team.name }}</span>
+        <span class="team-name">{{ truncateName(game.away_team.name) }}</span>
       </div>
     </div>
   </div>
@@ -76,6 +76,9 @@ export default {
   methods: {
     goBack() {
       Inertia.visit('/');
+    },
+     truncateName(name) {
+        return name.length > 15 ? name.substring(0, 10) + '.' : name;
     },
     formatDate(date) {
       const daysOfWeek = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
@@ -140,9 +143,10 @@ svg {
 
 .game-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  padding: 3rem 10rem;
+  padding: 3rem;
+  gap: 20px;
 }
 
 .team {
@@ -152,7 +156,7 @@ svg {
 }
 
 .team-name {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: larger;
 }
 
@@ -173,6 +177,6 @@ svg {
 
 .score-number {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 </style>

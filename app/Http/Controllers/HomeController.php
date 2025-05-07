@@ -11,17 +11,15 @@ class HomeController extends Controller
 {
     public function index()
 {
-    \Log::info('Controller aangeroepen');
     $divisions = Division::with('teams')->get();
     $matches = Game::with(['homeTeam.division', 'awayTeam.division'])
-        ->where('match_date', '<=', now())
-        ->orderBy('match_date', 'desc')
-        ->take(50)
-        ->get();
+    ->where('match_date', '<=', now())
+    ->orderBy('match_date', 'desc')
+    ->get();
+
 
     $standings = [];
 
-    // Bereken de standen voor elke divisie
     foreach ($divisions as $division) {
         $teams = $division->teams;
         $teamStats = [];
