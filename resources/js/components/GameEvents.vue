@@ -1,6 +1,10 @@
 <template>
     <div class="card my-6">
-        <h2 class="card-title">Gebeurtenissen</h2>
+        <div class="flex items-center justify-center header-title">
+            <img src="https://www.avkempen.be/assets/images/game-events/no-game-events-ball.svg" class="w-5">
+            <h2 class="card-title">Gebeurtenissen</h2>
+        </div>
+        <hr class="text-gray-200">
         <div class="p-6">
             <div class="relative">
                 <ul class="space-y-6">
@@ -127,6 +131,10 @@ const sortedEvents = computed(() => {
 </script>
 
 <style scoped>
+.header-title {
+    height: 5rem;
+}
+
 .card {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
@@ -141,8 +149,7 @@ const sortedEvents = computed(() => {
     font-size: 1rem;
     font-weight: 600;
     text-align: center;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem;
     color: #1f2937;
 }
 
