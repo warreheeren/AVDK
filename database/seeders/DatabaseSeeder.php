@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Division;
 use App\Models\Game;
+use App\Models\GameEvent;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
@@ -11,32 +12,25 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Roep de seeders aan om divisies en teams te genereren
         $this->call(DivisionSeeder::class);
         $this->call(TeamSeeder::class);
 
-        // Haal alle divisies op met bijbehorende teams (ervan uitgaande dat er 5 divisies zijn)
         $divisions = Division::with('teams')->take(5)->get();
 
         foreach ($divisions as $division) {
             $teams = $division->teams;
 
-            // Controleer of het aantal teams gelijk is aan 16
             if ($teams->count() !== 16) {
                 continue;
             }
 
-            $teams = $teams->values(); // Reset de indexen
+            $teams = $teams->values();
             $teamCount = $teams->count();
-            $rounds = $teamCount - 1; // 15 speeldagen voor 16 teams
+            $rounds = $teamCount - 1;
 
-            // Startdatum voor de speeldagen (uniform voor alle divisies)
             $startDate = Carbon::now()->subDays(90);
-
-            // Array voor de wedstrijden
             $matchDays = [];
 
-            // Genereer de eerste round-robin (heenduel)
             for ($round = 0; $round < $rounds; $round++) {
                 $pairings = [];
                 for ($i = 0; $i < $teamCount / 2; $i++) {
@@ -46,56 +40,105 @@ class DatabaseSeeder extends Seeder
                 }
                 $matchDays[] = $pairings;
 
-                // Wissel de teams voor de volgende ronde (roteren)
                 $fixed = $teams->shift();
                 $last = $teams->pop();
                 $teams->prepend($fixed);
                 $teams->splice(1, 0, [$last]);
             }
 
-            // Tweede ronde (terugwedstrijden)
             $returnMatchDays = array_map(function ($matches) {
                 return array_map(function ($pair) {
-                    return [$pair[1], $pair[0]]; // Omdraaien voor de terugwedstrijd
+                    return [$pair[1], $pair[0]];
                 }, $matches);
             }, $matchDays);
 
-            // Combineer heen- en terugwedstrijden
             $fullSchedule = array_merge($matchDays, $returnMatchDays);
 
-            // Totaal 30 speeldagen (15 heen + 15 terug)
             $totalMatchDays = 30;
-            $matchesPerDay = 8; // 8 wedstrijden per speeldag
-            $pastMatchDays = 25; // 25 speeldagen in het verleden
-            $futureMatchDays = 5; // 5 speeldagen in de toekomst
+            $matchesPerDay = 8;
+            $pastMatchDays = 25;
+            $futureMatchDays = 5;
 
-            // Voor elke speeldag, voeg de wedstrijden toe
             foreach ($fullSchedule as $dayIndex => $matches) {
-                // Stel de matchdatum in
                 if ($dayIndex < $pastMatchDays) {
-                    // Verleden: spreid over 90 dagen in het verleden
                     $matchDate = $startDate->copy()->subDays(($pastMatchDays - $dayIndex - 1) * 3);
                 } else {
-                    // Toekomst: spreid over 15 dagen in de toekomst
                     $futureOffset = ($dayIndex - $pastMatchDays) * 3;
                     $matchDate = Carbon::now()->addDays($futureOffset + 1);
                 }
 
-                // Zorg ervoor dat elke speeldag 8 wedstrijden bevat
                 foreach ($matches as [$homeTeam, $awayTeam]) {
-                    // Genereer de wedstrijd
-                    Game::create([
+                    $homeScore = $dayIndex < $pastMatchDays ? rand(0, 5) : null;
+                    $awayScore = $dayIndex < $pastMatchDays ? rand(0, 5) : null;
+
+                    $game = Game::create([
                         'home_team_id' => $homeTeam->id,
                         'away_team_id' => $awayTeam->id,
-                        'home_score' => $dayIndex < $pastMatchDays ? rand(0, 5) : null, // Scores voor verleden, null voor toekomst
-                        'away_score' => $dayIndex < $pastMatchDays ? rand(0, 5) : null, // Scores voor verleden, null voor toekomst
+                        'home_score' => $homeScore,
+                        'away_score' => $awayScore,
                         'match_date' => $matchDate,
                         'location' => $homeTeam->address ?? 'Unknown',
                         'division_id' => $division->id,
                     ]);
+
+                    if ($dayIndex < $pastMatchDays) {
+                        // Goals
+                        foreach (range(1, $homeScore) as $i) {
+                            GameEvent::create([
+                                'game_id' => $game->id,
+                                'team_id' => $homeTeam->id,
+                                'event_type' => 'goal',
+                                'minute' => rand(1, 90),
+                                'player_name' => 'Speler ' . rand(1, 11),
+                            ]);
+                        }
+
+                        foreach (range(1, $awayScore) as $i) {
+                            GameEvent::create([
+                                'game_id' => $game->id,
+                                'team_id' => $awayTeam->id,
+                                'event_type' => 'goal',
+                                'minute' => rand(1, 90),
+                                'player_name' => 'Speler ' . rand(1, 11),
+                            ]);
+                        }
+
+                        // Yellow cards
+                        foreach (range(1, rand(0, 3)) as $i) {
+                            GameEvent::create([
+                                'game_id' => $game->id,
+                                'team_id' => [$homeTeam->id, $awayTeam->id][rand(0, 1)],
+                                'event_type' => 'yellow_card',
+                                'minute' => rand(1, 90),
+                                'player_name' => 'Speler ' . rand(1, 11),
+                            ]);
+                        }
+
+                        // Red card (optional)
+                        if (rand(0, 10) > 8) {
+                            GameEvent::create([
+                                'game_id' => $game->id,
+                                'team_id' => [$homeTeam->id, $awayTeam->id][rand(0, 1)],
+                                'event_type' => 'red_card',
+                                'minute' => rand(1, 90),
+                                'player_name' => 'Speler ' . rand(1, 11),
+                            ]);
+                        }
+
+                        // Substitutions
+                        foreach (range(1, rand(1, 3)) as $i) {
+                            GameEvent::create([
+                                'game_id' => $game->id,
+                                'team_id' => [$homeTeam->id, $awayTeam->id][rand(0, 1)],
+                                'event_type' => 'substitution',
+                                'minute' => rand(1, 90),
+                                'player_in_name' => 'Speler ' . rand(12, 18),
+                                'player_out_name' => 'Speler ' . rand(1, 11),
+                            ]);
+                        }
+                    }
                 }
 
-                // Stop als we 30 speeldagen hebben bereikt
                 if ($dayIndex >= $totalMatchDays - 1) {
                     break;
                 }

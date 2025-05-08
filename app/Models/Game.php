@@ -23,4 +23,9 @@ class Game extends Model
     {
         return $this->belongsTo(Division::class);
     }
+    public function events()
+    {
+        return $this->hasMany(GameEvent::class,'game_id');
+    }
+
 }

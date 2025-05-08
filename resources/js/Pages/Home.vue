@@ -22,7 +22,8 @@
                             <table class="w-full mt-6 text-left">
                                 <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="py-3 px-4 text-sm text-gray-600">#</th>
+                                        <th class="py-3 px-2 text-sm text-gray-600 w-4"></th>
+                                        <th class="py-3 px-2 text-sm text-gray-600 text-right">#</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">Team</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">M</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">W</th>
@@ -35,21 +36,33 @@
                                 <tbody>
                                     <tr v-for="(team, index) in props.standings[division.id] || []" :key="team.id"
                                         class="border-b transition-all hover:bg-gray-50">
-                                        <td class="py-3 px-4">{{ index + 1 }}</td>
+                                        <td class="py-3 px-2 w-6 h-6 text-center">
+                                            <template v-if="index === 0">
+                                                <img src="https://www.avkempen.be/assets/images/trophies/beker-kempen-trophy.svg"
+                                                    alt="Trophy" class="mx-auto" />
+                                            </template>
+                                            <template
+                                                v-else-if="index >= (props.standings[division.id]?.length || 0) - 2">
+                                                <span class="text-red-600 font-bold ">|</span>
+                                            </template>
+                                        </td>
+                                        <td class="py-3 px-2 text-right">
+                                            {{ index + 1 }}
+                                        </td>
                                         <td class="py-3 px-4">
                                             <div class="flex items-center space-x-2">
-                                                <img :src="team.logo" alt="Team Logo" class="w-8 h-8 rounded-full border border-gray-300" />
-                                                <Link :href="`/teams/${team.id}`" class="team-name text-blue-600 hover:underline">
-                                                    {{ team.name }}
+                                                <img :src="team.logo" alt="Team Logo" class="w-6 h-7 " />
+                                                <Link :href="`/teams/${team.id}`" class="team-name hover:underline">
+                                                {{ team.name }}
                                                 </Link>
                                             </div>
                                         </td>
-                                        <td class="py-3 px-4 text-center">{{ team.matches }}</td>
-                                        <td class="py-3 px-4 text-center">{{ team.wins }}</td>
-                                        <td class="py-3 px-4 text-center">{{ team.draws }}</td>
-                                        <td class="py-3 px-4 text-center">{{ team.losses }}</td>
-                                        <td class="py-3 px-4 text-center">{{ team.goalDifference }}</td>
-                                        <td class="py-3 px-4 text-center">{{ team.points }}</td>
+                                        <td class="py-3 px-4">{{ team.matches }}</td>
+                                        <td class="py-3 px-4">{{ team.wins }}</td>
+                                        <td class="py-3 px-4">{{ team.draws }}</td>
+                                        <td class="py-3 px-4">{{ team.losses }}</td>
+                                        <td class="py-3 px-4">{{ team.goal_difference }}</td>
+                                        <td class="py-3 px-4">{{ team.points }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -69,47 +82,47 @@ import LastPlayedGames from '@/components/LastPlayedGames.vue';
 import DateFilter from '../components/DateFilter.vue';
 
 const props = defineProps({
-  divisions: Array,
-  matches: Array,
-  standings: Object,
+    divisions: Array,
+    matches: Array,
+    standings: Object,
 });
 const selectedDivision = ref(props.divisions[0]?.name || '');
 const selectedDate = ref('2025-05-06');
 
 const uniqueMatchDates = computed(() => {
-  if (!selectedDivision.value) return [];
+    if (!selectedDivision.value) return [];
 
-  const dates = props.matches
-    .filter(match =>
-      match.home_team.division?.name === selectedDivision.value ||
-      match.away_team.division?.name === selectedDivision.value
-    )
-    .map(m => new Date(m.match_date).toISOString().split('T')[0]);
+    const dates = props.matches
+        .filter(match =>
+            match.home_team.division?.name === selectedDivision.value ||
+            match.away_team.division?.name === selectedDivision.value
+        )
+        .map(m => new Date(m.match_date).toISOString().split('T')[0]);
 
-  return [...new Set(dates)].sort((a, b) => new Date(b) - new Date(a));
+    return [...new Set(dates)].sort((a, b) => new Date(b) - new Date(a));
 });
 
 const filteredDivisions = computed(() => {
-  if (!selectedDivision.value) return props.divisions;
-  return props.divisions.filter(division => division.name === selectedDivision.value);
+    if (!selectedDivision.value) return props.divisions;
+    return props.divisions.filter(division => division.name === selectedDivision.value);
 });
 
 const filteredMatches = computed(() => {
-  if (!selectedDivision.value) return props.matches;
+    if (!selectedDivision.value) return props.matches;
 
-  let matches = props.matches.filter(match =>
-    match.home_team.division?.name === selectedDivision.value ||
-    match.away_team.division?.name === selectedDivision.value
-  );
+    let matches = props.matches.filter(match =>
+        match.home_team.division?.name === selectedDivision.value ||
+        match.away_team.division?.name === selectedDivision.value
+    );
 
-  if (selectedDate.value) {
-    matches = matches.filter(match => {
-      const matchDate = new Date(match.match_date).toISOString().split('T')[0];
-      return matchDate === selectedDate.value;
-    });
-  }
+    if (selectedDate.value) {
+        matches = matches.filter(match => {
+            const matchDate = new Date(match.match_date).toISOString().split('T')[0];
+            return matchDate === selectedDate.value;
+        });
+    }
 
-  return matches;
+    return matches;
 });
 </script>
 
@@ -138,7 +151,7 @@ const filteredMatches = computed(() => {
 
 .standings {
     flex: 1;
-    max-width: 800px;
+    max-width: 700px;
 }
 
 .bg-white {
@@ -154,11 +167,11 @@ const filteredMatches = computed(() => {
 }
 
 .shadow-lg {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .shadow-xl {
-    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .p-5 {

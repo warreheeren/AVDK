@@ -4,23 +4,23 @@
 
         <ul v-if="matches.length">
             <li v-for="match in matches" :key="match.id" class="match-item">
-                <Link :href="`/games/${match.id}`" class="flex w-full no-underline text-inherit">
-                    <div class="team">
-                        <img :src="match.home_team.logo" alt="Home Team Logo" class="team-logo" />
-                        <span class="team-name">{{ match.home_team.name }}</span>
-                    </div>
+                <Link :href="`/games/${match.id}`" class="flex justify-center w-full no-underline text-inherit">
+                <div class="team">
+                    <img :src="match.home_team.logo" alt="Home Team Logo" class="team-logo" />
+                    <span class="team-name">{{ match.home_team.name }}</span>
+                </div>
 
-                    <div class="score">
-                        <span class="score-number">{{ match.home_score }}</span>
-                        <span class="separator">-</span>
-                        <span class="score-number">{{ match.away_score }}</span>
-                    </div>
+                <div class="score">
+                    <span class="score-number">{{ match.home_score }}</span>
+                    <span class="separator">-</span>
+                    <span class="score-number">{{ match.away_score }}</span>
+                </div>
 
-                    <div class="team">
-                        <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
-                        <span class="team-name">{{ match.away_team.name }}</span>
-                    </div>
-                 </Link>
+                <div class="team">
+                    <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
+                    <span class="team-name">{{ match.away_team.name }}</span>
+                </div>
+                </Link>
             </li>
         </ul>
         <p v-else class="text-gray-500">Er zijn geen wedstrijden op deze datum.</p>
@@ -42,9 +42,9 @@ export default {
         }
     },
     mounted() {
-    console.log('Matches:', this.matches);
-    console.log('Division:', this.division);
-  },
+        console.log('Matches:', this.matches);
+        console.log('Division:', this.division);
+    },
 };
 </script>
 
@@ -82,7 +82,6 @@ export default {
 }
 
 .team-logo {
-    width: 30px;
     height: 30px;
     margin-bottom: 4px;
 }
