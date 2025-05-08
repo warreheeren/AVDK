@@ -83,26 +83,32 @@ class DatabaseSeeder extends Seeder
 
                     if ($dayIndex < $pastMatchDays) {
                         // Goals
-                        foreach (range(1, $homeScore) as $i) {
+                        $homePlayers = range(1, 11);
+                        $awayPlayers = range(1, 11);
+                        $minutes = range(1, 90);
+                        shuffle($homePlayers);
+                        shuffle($awayPlayers);
+                        shuffle($minutes);
+
+                        for ($i = 0; $i < $homeScore; $i++) {
                             GameEvent::create([
                                 'game_id' => $game->id,
                                 'team_id' => $homeTeam->id,
                                 'event_type' => 'goal',
-                                'minute' => rand(1, 90),
-                                'player_name' => 'Speler ' . rand(1, 11),
+                                'minute' => $minutes[$i % count($minutes)],
+                                'player_name' => 'Speler ' . $homePlayers[$i % count($homePlayers)],
                             ]);
                         }
 
-                        foreach (range(1, $awayScore) as $i) {
+                        for ($i = 0; $i < $awayScore; $i++) {
                             GameEvent::create([
                                 'game_id' => $game->id,
                                 'team_id' => $awayTeam->id,
                                 'event_type' => 'goal',
-                                'minute' => rand(1, 90),
-                                'player_name' => 'Speler ' . rand(1, 11),
+                                'minute' => $minutes[($i + $homeScore) % count($minutes)],
+                                'player_name' => 'Speler ' . $awayPlayers[$i % count($awayPlayers)],
                             ]);
                         }
-
                         // Yellow cards
                         foreach (range(1, rand(0, 3)) as $i) {
                             GameEvent::create([
