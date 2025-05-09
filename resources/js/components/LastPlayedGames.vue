@@ -11,10 +11,16 @@
                 </div>
 
                 <div class="score">
-                    <span class="score-number">{{ match.home_score }}</span>
-                    <span class="separator">-</span>
-                    <span class="score-number">{{ match.away_score }}</span>
+                    <template v-if="isFutureMatch(match.match_date)">
+                        <span>{{ formatTime(match.match_date) }}</span>
+                    </template>
+                    <template v-else>
+                        <span class="score-number">{{ match.home_score }}</span>
+                        <span class="separator">-</span>
+                        <span class="score-number">{{ match.away_score }}</span>
+                    </template>
                 </div>
+
 
                 <div class="team">
                     <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
@@ -41,10 +47,18 @@ export default {
             required: true,
         }
     },
-    mounted() {
-        console.log('Matches:', this.matches);
-        console.log('Division:', this.division);
-    },
+    methods: {
+        isFutureMatch(date) {
+            return new Date(date) > new Date();
+        },
+        formatTime(date) {
+            return new Date(date).toLocaleTimeString('nl-NL', {
+                hour: '2-digit',
+                minute: '2-digit',
+            });
+        },
+    }
+
 };
 </script>
 

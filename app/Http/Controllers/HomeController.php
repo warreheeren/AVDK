@@ -13,7 +13,6 @@ class HomeController extends Controller
 {
     $divisions = Division::with('teams')->get();
     $matches = Game::with(['homeTeam.division', 'awayTeam.division'])
-    ->where('match_date', '<=', now())
     ->orderBy('match_date', 'desc')
     ->get();
 

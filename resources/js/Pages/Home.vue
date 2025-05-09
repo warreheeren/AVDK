@@ -92,15 +92,25 @@ const selectedDate = ref('2025-05-06');
 const uniqueMatchDates = computed(() => {
     if (!selectedDivision.value) return [];
 
-    const dates = props.matches
+    const now = new Date();
+
+    const allDates = props.matches
         .filter(match =>
             match.home_team.division?.name === selectedDivision.value ||
             match.away_team.division?.name === selectedDivision.value
         )
         .map(m => new Date(m.match_date).toISOString().split('T')[0]);
 
-    return [...new Set(dates)].sort((a, b) => new Date(b) - new Date(a));
+    const pastDates = [...new Set(allDates.filter(d => new Date(d) <= now))];
+    const futureDates = [...new Set(allDates.filter(d => new Date(d) > now))].sort((a, b) => new Date(a) - new Date(b));
+
+    if (futureDates.length > 0) {
+        pastDates.push(futureDates[0]);
+    }
+
+    return [...new Set(pastDates)].sort((a, b) => new Date(b) - new Date(a));
 });
+
 
 const filteredDivisions = computed(() => {
     if (!selectedDivision.value) return props.divisions;

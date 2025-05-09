@@ -6,6 +6,8 @@ use App\Models\Game;
 use App\Models\Division;
 use App\Models\GameEvent;
 use Inertia\Inertia;
+use Carbon\Carbon;
+
 
 class GameController extends Controller
 {
@@ -89,4 +91,43 @@ class GameController extends Controller
             'standings' => $standings,
         ]);
     }
+    public function showAdminPanel()
+    {
+        $divisions = Division::with('teams')->get();
+
+        $upcomingGames = Game::where('match_date', '>', Carbon::now())
+            ->orderBy('match_date')
+            ->with(['homeTeam', 'awayTeam'])
+            ->get()
+            ->groupBy('division_id');
+
+        return Inertia::render('AdminPannel', [
+            'divisions' => $divisions,
+            'upcomingGames' => $upcomingGames,
+        ]);
+    }
+
+    public function getEventsForPolling($gameId)
+    {
+        $events = GameEvent::where('game_id', $gameId)
+            ->orderBy('minute')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'minute' => $event->minute,
+                    'event_type' => $event->event_type,
+                    'team_id' => $event->team_id,
+                    'player_name' => $event->player_name,
+                    'player_out_name' => $event->player_out_name,
+                    'player_in_name' => $event->player_in_name,
+                    'score' => $event->score,
+                ];
+            });
+
+        return response()->json([
+            'events' => $events,
+        ]);
+    }
+
 }

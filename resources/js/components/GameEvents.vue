@@ -8,7 +8,7 @@
         <div class="p-6">
             <div class="relative">
                 <ul class="space-y-6">
-                    <li v-for="event in sortedEvents" :key="event.id" class="relative flex items-center justify-center">
+                    <li v-for="event in events" :key="event.id" class="relative flex items-center justify-center">
                         <div v-if="event.minute === 45"
                             class="relative text-center font-bold text-xl text-gray-700 z-10 w-full">
                             <div class="flex items-center justify-center">
@@ -25,24 +25,17 @@
                             <div class="w-1/2 pr-4 flex justify-end items-center"
                                 :class="{ 'invisible': event.team_id !== homeTeamId }">
                                 <span v-if="event.team_id === homeTeamId" class="event-details flex items-center">
-                                    <span v-if="event.event_type === 'goal'">
-                                        {{ event.player_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'substitution'">
-                                        {{ event.player_out_name }} → {{ event.player_in_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'yellow_card'">
-                                        {{ event.player_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'red_card'">
-                                        {{ event.player_name }}
-                                    </span>
+                                    <span v-if="event.event_type === 'goal'">{{ event.player_name }}</span>
+                                    <span v-else-if="event.event_type === 'substitution'">{{ event.player_out_name }} →
+                                        {{ event.player_in_name }}</span>
+                                    <span v-else-if="event.event_type === 'yellow_card'">{{ event.player_name }}</span>
+                                    <span v-else-if="event.event_type === 'red_card'">{{ event.player_name }}</span>
                                     <span class="event-icon mx-2">
                                         <img v-if="event.event_type === 'goal'"
                                             src="https://www.avkempen.be/assets/images/game-events/ball.svg" alt="Goal"
                                             class="icon" />
                                         <i v-else-if="event.event_type === 'substitution'"
-                                            class=" fa-solid fa-repeat text-green-500"></i>
+                                            class="fa-solid fa-repeat text-green-500"></i>
                                         <img v-else-if="event.event_type === 'yellow_card'"
                                             src="https://www.avkempen.be/assets/images/game-events/yellow-card.png"
                                             alt="Yellow Card" class="icon" />
@@ -73,61 +66,39 @@
                                             src="https://www.avkempen.be/assets/images/game-events/red-card.png"
                                             alt="Red Card" class="icon" />
                                     </span>
-                                    <span v-if="event.event_type === 'goal'">
-                                        {{ event.player_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'substitution'">
-                                        {{ event.player_out_name }} → {{ event.player_in_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'yellow_card'">
-                                        {{ event.player_name }}
-                                    </span>
-                                    <span v-else-if="event.event_type === 'red_card'">
-                                        {{ event.player_name }}
-                                    </span>
+                                    <span v-if="event.event_type === 'goal'">{{ event.player_name }}</span>
+                                    <span v-else-if="event.event_type === 'substitution'">{{ event.player_out_name }} →
+                                        {{ event.player_in_name }}</span>
+                                    <span v-else-if="event.event_type === 'yellow_card'">{{ event.player_name }}</span>
+                                    <span v-else-if="event.event_type === 'red_card'">{{ event.player_name }}</span>
                                 </span>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <p v-if="!sortedEvents.length" class="text-gray-500 text-center">Geen gebeurtenissen beschikbaar.</p>
+            <p v-if="!events.length" class="text-gray-500 text-center">Geen gebeurtenissen beschikbaar.</p>
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue'
+import { usePoll } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
 
-const fakeEvent45 = {
-    id: 'fake-45',
-    minute: 45,
-    event_type: 'halftime',
-    team_id: null,
-    player_name: null,
-    player_out_name: null,
-    player_in_name: null,
-    score: null
-};
+usePoll(2000);
+
 
 const props = defineProps({
-    events: {
-        type: Array,
-        required: true,
-    },
-    game: {
-        type: Object,
-        required: true,
-    }
-});
+    events: Array,
+    game: Object,
+})
 
-const homeTeamId = computed(() => props.game?.home_team_id || null);
-const awayTeamId = computed(() => props.game?.away_team_id || null);
 
-const sortedEvents = computed(() => {
-    if (!props.events || !props.events.length) return [fakeEvent45];
-    return [...props.events, fakeEvent45].sort((a, b) => a.minute - b.minute);
-});
+const homeTeamId = computed(() => props.game?.home_team_id || null)
+const awayTeamId = computed(() => props.game?.away_team_id || null)
+
 </script>
 
 <style scoped>

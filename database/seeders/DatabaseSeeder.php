@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(DivisionSeeder::class);
         $this->call(TeamSeeder::class);
+        $this->call(AdminSeeder::class);
 
         $divisions = Division::with('teams')->take(5)->get();
 
