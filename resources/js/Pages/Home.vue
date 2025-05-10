@@ -80,6 +80,8 @@ import { Link } from '@inertiajs/vue3';
 import DivisionFilter from '../components/DivisionFilter.vue';
 import LastPlayedGames from '@/components/LastPlayedGames.vue';
 import DateFilter from '../components/DateFilter.vue';
+import { usePoll } from '@inertiajs/vue3';
+usePoll(2000);
 
 const props = defineProps({
     divisions: Array,

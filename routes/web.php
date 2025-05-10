@@ -20,4 +20,3 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('/add-event/{gameId}', [EventController::class, 'create'])->name('add-event');
 Route::post('/add-event', [EventController::class, 'store'])->name('add-event.store');
 
-Route::get('/games/{gameId}/events', [GameController::class, 'getEventsForPolling'])->name('games.events');

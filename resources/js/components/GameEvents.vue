@@ -83,11 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { usePoll } from '@inertiajs/vue3'
-import { usePage } from '@inertiajs/vue3'
-
-usePoll(2000);
+import { computed } from 'vue'
 
 
 const props = defineProps({

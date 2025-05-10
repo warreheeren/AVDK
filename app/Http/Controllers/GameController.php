@@ -16,8 +16,6 @@ class GameController extends Controller
         $game = Game::with(['homeTeam', 'awayTeam', 'division', 'events'])->findOrFail($gameId);
 
         $divisions = Division::with('teams')->get();
-
-        $events = GameEvent::where('game_id', $gameId)->orderBy('minute')->get();
         $standings = [];
 
         foreach ($divisions as $division) {
@@ -87,7 +85,7 @@ class GameController extends Controller
         return Inertia::render('GameDetail', [
             'game' => $game,
             'divisions' => $divisions,
-            'events' => $events,
+            'events' => $game->events->sortBy('minute')->values(),
             'standings' => $standings,
         ]);
     }
@@ -104,29 +102,6 @@ class GameController extends Controller
         return Inertia::render('AdminPannel', [
             'divisions' => $divisions,
             'upcomingGames' => $upcomingGames,
-        ]);
-    }
-
-    public function getEventsForPolling($gameId)
-    {
-        $events = GameEvent::where('game_id', $gameId)
-            ->orderBy('minute')
-            ->get()
-            ->map(function ($event) {
-                return [
-                    'id' => $event->id,
-                    'minute' => $event->minute,
-                    'event_type' => $event->event_type,
-                    'team_id' => $event->team_id,
-                    'player_name' => $event->player_name,
-                    'player_out_name' => $event->player_out_name,
-                    'player_in_name' => $event->player_in_name,
-                    'score' => $event->score,
-                ];
-            });
-
-        return response()->json([
-            'events' => $events,
         ]);
     }
 

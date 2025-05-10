@@ -6,6 +6,8 @@ use App\Models\Division;
 use App\Models\Game;
 use App\Models\Team;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {

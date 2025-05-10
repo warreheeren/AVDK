@@ -49,6 +49,23 @@ class EventController extends Controller
             'player_out_name' => $request->player_out_name,
         ]);
 
-        return redirect()->route('add-event', ['gameId' => $request->game_id]);
+        if (strtolower($request->event_type) === 'goal') {
+            $game = Game::findOrFail($request->game_id);
+
+            $game->home_score = $game->home_score ?? 0;
+            $game->away_score = $game->away_score ?? 0;
+
+            if ($request->team_id == $game->home_team_id) {
+                $game->home_score += 1;
+            } elseif ($request->team_id == $game->away_team_id) {
+                $game->away_score += 1;
+            }
+
+            $game->save();
+        }
+
+        return Inertia::render('HomePage', [
+            'games' => Game::with('homeTeam', 'awayTeam')->get(),
+        ]);
     }
 }
