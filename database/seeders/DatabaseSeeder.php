@@ -82,6 +82,13 @@ class DatabaseSeeder extends Seeder
                         'division_id' => $division->id,
                     ]);
 
+                    GameEvent::create([
+                        'game_id' => $game->id,
+                        'team_id' => $homeTeam->id,
+                        'event_type' => 'Half-Time',
+                        'minute' => 45,
+                    ]);
+
                     if ($dayIndex < $pastMatchDays) {
                         // Goals
                         $homePlayers = range(1, 11);

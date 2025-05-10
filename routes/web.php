@@ -17,6 +17,6 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/add-event/{gameId}', [EventController::class, 'create'])->name('add-event');
+Route::get('/add-event/{gameId}', [EventController::class, 'create'])->name('add-event')->middleware('auth');
 Route::post('/add-event', [EventController::class, 'store'])->name('add-event.store');
 

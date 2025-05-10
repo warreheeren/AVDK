@@ -9,7 +9,7 @@
             <div class="relative">
                 <ul class="space-y-6">
                     <li v-for="event in events" :key="event.id" class="relative flex items-center justify-center">
-                        <div v-if="event.minute === 45"
+                        <div v-if="event.event_type === 'Half-Time'"
                             class="relative text-center font-bold text-xl text-gray-700 z-10 w-full">
                             <div class="flex items-center justify-center">
                                 <span class="flex-grow border-t border-gray-200"></span>
@@ -90,7 +90,6 @@ const props = defineProps({
     events: Array,
     game: Object,
 })
-
 
 const homeTeamId = computed(() => props.game?.home_team_id || null)
 const awayTeamId = computed(() => props.game?.away_team_id || null)

@@ -11,8 +11,12 @@
                 </div>
 
                 <div class="score">
-                    <template v-if="isFutureMatch(match.match_date)">
-                        <span>{{ formatTime(match.match_date) }}</span>
+                    <template
+                        v-if="isFutureMatch(match.match_date) && match.home_score === null && match.away_score === null">
+                        <span class="text-gray-600">{{ formatTime(match.match_date) }}</span>
+                    </template>
+                    <template v-else-if="match.home_score === null && match.away_score === null">
+                        <span class="text-gray-600"> {{ formatTime(match.match_date) }}</span>
                     </template>
                     <template v-else>
                         <span class="score-number">{{ match.home_score }}</span>
@@ -20,8 +24,6 @@
                         <span class="score-number">{{ match.away_score }}</span>
                     </template>
                 </div>
-
-
                 <div class="team">
                     <img :src="match.away_team.logo" alt="Away Team Logo" class="team-logo" />
                     <span class="team-name">{{ match.away_team.name }}</span>
@@ -51,10 +53,15 @@ export default {
     },
     methods: {
         isFutureMatch(date) {
+            const hasScore = this.matches.some(match => match.home_score !== null || match.away_score !== null);
+            if (hasScore) {
+                return false;
+            }
             return new Date(date) > new Date();
         },
         formatTime(date) {
             return new Date(date).toLocaleTimeString('nl-NL', {
+                weekday: 'short',
                 hour: '2-digit',
                 minute: '2-digit',
             });

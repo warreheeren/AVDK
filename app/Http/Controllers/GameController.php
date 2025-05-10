@@ -14,7 +14,6 @@ class GameController extends Controller
     public function show($gameId)
     {
         $game = Game::with(['homeTeam', 'awayTeam', 'division', 'events'])->findOrFail($gameId);
-
         $divisions = Division::with('teams')->get();
         $standings = [];
 
@@ -104,5 +103,4 @@ class GameController extends Controller
             'upcomingGames' => $upcomingGames,
         ]);
     }
-
 }
