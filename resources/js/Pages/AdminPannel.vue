@@ -1,11 +1,17 @@
 <template>
     <div class="main-container">
         <div class="container">
-            <h1 class="main-title">Upcoming Matches</h1>
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="main-title">Volgende wedstrijden</h1>
+                <Link href="/logout" method="post" as="button"
+                    class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                Logout
+                </Link>
+            </div>
 
-            <label for="division-select" class="label">Filter by Division: </label>
+            <label for="division-select" class="label">Filter op divisie: </label>
             <select id="division-select" v-model="selectedDivision" class="select">
-                <option value="">All Divisions</option>
+                <option value="">Alle divisies</option>
                 <option v-for="division in divisions" :key="division.id" :value="division.id">
                     {{ division.name }}
                 </option>
@@ -17,22 +23,23 @@
                     <h2 class="division-title">{{ division.name }}</h2>
 
                     <ul>
-                        <li v-for="(game, index) in upcomingGames[division.id].slice(0, 1)" :key="game.id"
+                        <li v-for="(game, index) in upcomingGames[division.id].slice(0, 8)" :key="game.id"
                             class="game-item">
                             <p v-if="game.home_team && game.away_team" class="game-info">
                                 {{ game.home_team.name }} vs {{ game.away_team.name }}
                             </p>
                             <p v-else class="game-info">Loading team data...</p>
-                            <p class="game-location">Location: {{ game.location }}</p>
-                            <p class="game-date">Match Date: {{ game.match_date }}</p>
+                            <p class="game-location">Locatie: {{ game.location }}</p>
+                            <p class="game-date">Match Datum: {{ game.match_date }}</p>
 
                             <Link :href="`/add-event/${game.id}`" class="add-event-link">
-                            ➕ Add Event
+                            Add Event
                             </Link>
                         </li>
                     </ul>
                 </div>
             </div>
+
         </div>
     </div>
 </template>

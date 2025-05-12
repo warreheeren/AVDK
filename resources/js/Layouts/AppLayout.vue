@@ -2,8 +2,11 @@
     <div class="page-wrapper">
         <nav class="navbar">
             <div class="logo-section">
+                <Link href="/" class="flex items-center">
                 <img class="avdk-icon" src="https://www.avkempen.be/assets/images/logo.png" />
                 <h2 class="logo-text">A.V. de Kempen</h2>
+                </Link>
+
             </div>
             <div class="nav-links">
                 <a href="#" class="nav-link">Nieuws</a>
@@ -52,6 +55,14 @@
         </footer>
     </div>
 </template>
+<script>
+import { Link } from '@inertiajs/vue3';
+export default {
+    components: {
+        Link,
+    },
+};
+</script>
 
 <style>
 body {
