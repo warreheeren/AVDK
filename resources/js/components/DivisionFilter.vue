@@ -9,23 +9,36 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import { computed } from 'vue';
 
-const props = defineProps({
-    modelValue: String,
-    divisions: Array,
-});
+export default {
+    props: {
+        modelValue: {
+            type: String,
+            required: false,
+        },
+        divisions: {
+            type: Array,
+            required: true,
+        },
+    },
+    emits: ['update:modelValue'],
+    setup(props, { emit }) {
+        const internalValue = computed({
+            get: () => props.modelValue,
+            set: (value) => emit('update:modelValue', value),
+        });
 
-const emit = defineEmits(['update:modelValue']);
+        const selectDivision = (value) => {
+            internalValue.value = value;
+        };
 
-const internalValue = computed({
-    get: () => props.modelValue,
-    set: (value) => emit('update:modelValue', value),
-});
-
-const selectDivision = (value) => {
-    internalValue.value = value;
+        return {
+            internalValue,
+            selectDivision,
+        };
+    },
 };
 </script>
 

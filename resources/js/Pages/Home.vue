@@ -166,10 +166,6 @@ const filteredMatches = computed(() => {
     max-width: 700px;
 }
 
-.bg-white {
-    background-color: #fff;
-}
-
 .border {
     border: 1px solid #e5e7eb;
 }
@@ -190,29 +186,14 @@ const filteredMatches = computed(() => {
     padding: 1.25rem;
 }
 
-.text-gray-900 {
-    color: #1f2937;
-}
-
-.text-blue-600 {
-    color: #2563eb;
-}
-
 .font-semibold {
     font-weight: 600;
-}
-
-.w-full {
-    width: 100%;
 }
 
 .mt-6 {
     margin-top: 1.5rem;
 }
 
-.text-left {
-    text-align: left;
-}
 
 .border-b {
     border-bottom: 1px solid #e5e7eb;
@@ -228,20 +209,8 @@ const filteredMatches = computed(() => {
     padding-right: 1rem;
 }
 
-.flex {
-    display: flex;
-}
-
-.items-center {
-    align-items: center;
-}
-
 .space-x-2 {
     margin-right: 0.5rem;
-}
-
-.rounded-full {
-    border-radius: 50%;
 }
 
 .hover\:underline:hover {
@@ -265,14 +234,19 @@ const filteredMatches = computed(() => {
     font-size: 0.875rem;
 }
 
-.text-center {
-    text-align: center;
-}
 
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
         align-items: center;
+    }
+
+    .sidebar {
+        max-width: 100%;
+    }
+
+    .content {
+        max-width: 100%;
     }
 
     .standings {
