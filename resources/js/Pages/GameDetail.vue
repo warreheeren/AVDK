@@ -41,8 +41,6 @@
 import GameDetailCard from '@/components/GameDetailCard.vue';
 import GameEvents from '../components/GameEvents.vue';
 
-import { usePoll } from '@inertiajs/vue3'
-
 export default {
     components: {
         GameDetailCard,
@@ -53,9 +51,6 @@ export default {
         divisions: Array,
         events: Array,
         standings: Object,
-    },
-    setup() {
-        usePoll(2000);
     },
     computed: {
         currentDivisionStandings() {
@@ -167,7 +162,7 @@ export default {
     .right-section {
         width: 100%;
         margin-top: 0px;
-        margin-bottom: 1rem;
+        height: auto;
     }
 
     .card {
