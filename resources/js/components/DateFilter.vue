@@ -91,7 +91,7 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1544px) {
     select {
         max-width: 100%;
     }
