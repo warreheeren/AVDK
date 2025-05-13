@@ -34,7 +34,10 @@
 import { useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
+const page = usePage()
+
 const form = useForm({
+    _token: page.props.csrf,
     email: '',
     password: '',
 });
