@@ -327,5 +327,9 @@ export default {
     .col-gd {
         display: none;
     }
+
+    .main-container {
+        padding: 0 !important;
+    }
 }
 </style>
