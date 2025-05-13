@@ -90,7 +90,6 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     if ($dayIndex < $pastMatchDays) {
-                        // Goals
                         $homePlayers = range(1, 11);
                         $awayPlayers = range(1, 11);
                         $minutes = range(1, 90);
@@ -117,7 +116,6 @@ class DatabaseSeeder extends Seeder
                                 'player_name' => 'Speler ' . $awayPlayers[$i % count($awayPlayers)],
                             ]);
                         }
-                        // Yellow cards
                         foreach (range(1, rand(0, 3)) as $i) {
                             GameEvent::create([
                                 'game_id' => $game->id,
@@ -128,7 +126,6 @@ class DatabaseSeeder extends Seeder
                             ]);
                         }
 
-                        // Red card (optional)
                         if (rand(0, 10) > 8) {
                             GameEvent::create([
                                 'game_id' => $game->id,
@@ -139,7 +136,6 @@ class DatabaseSeeder extends Seeder
                             ]);
                         }
 
-                        // Substitutions
                         foreach (range(1, rand(1, 3)) as $i) {
                             GameEvent::create([
                                 'game_id' => $game->id,

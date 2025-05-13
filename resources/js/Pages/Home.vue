@@ -50,9 +50,9 @@
                                         <td class="py-3 px-4">
                                             <div class="flex items-center space-x-2">
                                                 <img :src="team.logo" alt="Team Logo" class="w-6 h-7" />
-                                                <Link :href="`/teams/${team.id}`" class="team-name hover:underline">
-                                                {{ team.name }}
-                                                </Link>
+                                                <p class="team-name hover:underline">
+                                                    {{ team.name }}
+                                                </p>
                                             </div>
                                         </td>
                                         <td class="py-3 px-4">{{ team.matches }}</td>
@@ -60,7 +60,7 @@
                                         <td class="py-3 px-4 col-g">{{ team.draws }}</td>
                                         <td class="py-3 px-4 col-v">{{ team.losses }}</td>
                                         <td class="py-3 px-4 col-gd">{{ team.goal_difference }}</td>
-                                        <td class="py-3 px-4">{{ team.points }}</td>
+                                        <td class="py-3 px-4 font-bold">{{ team.points }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
 import { Link, usePoll } from '@inertiajs/vue3';
 import DivisionFilter from '../components/DivisionFilter.vue';
 import LastPlayedGames from '@/components/LastPlayedGames.vue';
