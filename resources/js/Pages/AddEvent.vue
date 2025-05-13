@@ -15,7 +15,12 @@
 
             <div class="form-group">
                 <label for="event_type" class="form-label">Event Type:</label>
-                <input type="text" v-model="form.event_type" required class="form-input" />
+                <select v-model="form.event_type" required class="form-input">
+                    <option value="goal">Goal</option>
+                    <option value="red_card">Rode Kaart</option>
+                    <option value="yellow_card">Gele Kaart</option>
+                    <option value="sub">Wissel</option>
+                </select>
             </div>
 
             <div class="form-group">

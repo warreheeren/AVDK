@@ -84,4 +84,10 @@ export default {
 .icon {
     margin-right: 0.5rem;
 }
+
+@media (max-width: 1280px) {
+    .dropdown {
+        margin-bottom: 0;
+    }
+}
 </style>

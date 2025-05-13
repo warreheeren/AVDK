@@ -144,7 +144,7 @@ class DatabaseSeeder extends Seeder
                             GameEvent::create([
                                 'game_id' => $game->id,
                                 'team_id' => [$homeTeam->id, $awayTeam->id][rand(0, 1)],
-                                'event_type' => 'substitution',
+                                'event_type' => 'sub',
                                 'minute' => rand(1, 90),
                                 'player_in_name' => 'Speler ' . rand(12, 18),
                                 'player_out_name' => 'Speler ' . rand(1, 11),

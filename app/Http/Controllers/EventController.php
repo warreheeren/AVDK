@@ -64,7 +64,7 @@ class EventController extends Controller
             $game->save();
         }
 
-        return Inertia::render('HomePage', [
+        return Inertia::render('AddEvent', [
             'games' => Game::with('homeTeam', 'awayTeam')->get(),
         ]);
     }

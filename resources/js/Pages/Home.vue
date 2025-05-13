@@ -2,7 +2,7 @@
     <div class="p-6">
         <div class="main-container">
             <div class="sidebar">
-                <DivisionFilter :divisions="props.divisions" v-model="selectedDivision" />
+                <DivisionFilter :divisions="divisions" v-model="selectedDivision" />
             </div>
             <div class="content">
                 <DateFilter :uniqueMatchDates="uniqueMatchDates" :selectedDate="selectedDate"
@@ -11,7 +11,6 @@
                 <LastPlayedGames :matches="filteredMatches" :division="filteredDivisions[0]" />
             </div>
 
-            <!-- Standings Section -->
             <div class="standings">
                 <section>
                     <div class="stand">
@@ -26,24 +25,23 @@
                                         <th class="py-3 px-2 text-sm text-gray-600 text-right">#</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">Team</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">M</th>
-                                        <th class="py-3 px-4 text-sm text-gray-600">W</th>
-                                        <th class="py-3 px-4 text-sm text-gray-600">G</th>
-                                        <th class="py-3 px-4 text-sm text-gray-600">V</th>
-                                        <th class="py-3 px-4 text-sm text-gray-600">+/-</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600 col-w">W</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600 col-g">G</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600 col-v">V</th>
+                                        <th class="py-3 px-4 text-sm text-gray-600 col-gd">+/-</th>
                                         <th class="py-3 px-4 text-sm text-gray-600">P</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(team, index) in props.standings[division.id] || []" :key="team.id"
+                                    <tr v-for="(team, index) in standings[division.id] || []" :key="team.id"
                                         class="border-b transition-all hover:bg-gray-50">
                                         <td class="py-3 px-2 w-6 h-6 text-center">
                                             <template v-if="index === 0">
                                                 <img src="https://www.avkempen.be/assets/images/trophies/beker-kempen-trophy.svg"
                                                     alt="Trophy" class="mx-auto" />
                                             </template>
-                                            <template
-                                                v-else-if="index >= (props.standings[division.id]?.length || 0) - 2">
-                                                <span class="text-red-600 font-bold ">|</span>
+                                            <template v-else-if="index >= (standings[division.id]?.length || 0) - 2">
+                                                <span class="text-red-600 font-bold">|</span>
                                             </template>
                                         </td>
                                         <td class="py-3 px-2 text-right">
@@ -51,17 +49,17 @@
                                         </td>
                                         <td class="py-3 px-4">
                                             <div class="flex items-center space-x-2">
-                                                <img :src="team.logo" alt="Team Logo" class="w-6 h-7 " />
+                                                <img :src="team.logo" alt="Team Logo" class="w-6 h-7" />
                                                 <Link :href="`/teams/${team.id}`" class="team-name hover:underline">
                                                 {{ team.name }}
                                                 </Link>
                                             </div>
                                         </td>
                                         <td class="py-3 px-4">{{ team.matches }}</td>
-                                        <td class="py-3 px-4">{{ team.wins }}</td>
-                                        <td class="py-3 px-4">{{ team.draws }}</td>
-                                        <td class="py-3 px-4">{{ team.losses }}</td>
-                                        <td class="py-3 px-4">{{ team.goal_difference }}</td>
+                                        <td class="py-3 px-4 col-w">{{ team.wins }}</td>
+                                        <td class="py-3 px-4 col-g">{{ team.draws }}</td>
+                                        <td class="py-3 px-4 col-v">{{ team.losses }}</td>
+                                        <td class="py-3 px-4 col-gd">{{ team.goal_difference }}</td>
                                         <td class="py-3 px-4">{{ team.points }}</td>
                                     </tr>
                                 </tbody>
@@ -74,69 +72,93 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import { ref, computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePoll } from '@inertiajs/vue3';
 import DivisionFilter from '../components/DivisionFilter.vue';
 import LastPlayedGames from '@/components/LastPlayedGames.vue';
 import DateFilter from '../components/DateFilter.vue';
-import { usePoll } from '@inertiajs/vue3';
-usePoll(2000);
 
-const props = defineProps({
-    divisions: Array,
-    matches: Array,
-    standings: Object,
-});
-const selectedDivision = ref(props.divisions[0]?.name || '');
-const selectedDate = ref('2025-05-06');
+export default {
+    name: 'MatchOverview',
 
-const uniqueMatchDates = computed(() => {
-    if (!selectedDivision.value) return [];
+    components: {
+        Link,
+        DivisionFilter,
+        LastPlayedGames,
+        DateFilter,
+    },
 
-    const now = new Date();
+    props: {
+        divisions: Array,
+        matches: Array,
+        standings: Object,
+    },
 
-    const allDates = props.matches
-        .filter(match =>
-            match.home_team.division?.name === selectedDivision.value ||
-            match.away_team.division?.name === selectedDivision.value
-        )
-        .map(m => new Date(m.match_date).toISOString().split('T')[0]);
+    data() {
+        return {
+            selectedDivision: this.divisions[0]?.name || '',
+            selectedDate: '2025-05-06',
+        };
+    },
 
-    const pastDates = [...new Set(allDates.filter(d => new Date(d) <= now))];
-    const futureDates = [...new Set(allDates.filter(d => new Date(d) > now))].sort((a, b) => new Date(a) - new Date(b));
+    computed: {
+        uniqueMatchDates() {
+            if (!this.selectedDivision) return [];
 
-    if (futureDates.length > 0) {
-        pastDates.push(futureDates[0]);
-    }
+            const now = new Date();
 
-    return [...new Set(pastDates)].sort((a, b) => new Date(b) - new Date(a));
-});
+            const allDates = this.matches
+                .filter(
+                    match =>
+                        match.home_team.division?.name === this.selectedDivision ||
+                        match.away_team.division?.name === this.selectedDivision
+                )
+                .map(m => new Date(m.match_date).toISOString().split('T')[0]);
 
+            const pastDates = [...new Set(allDates.filter(d => new Date(d) <= now))];
+            const futureDates = [...new Set(allDates.filter(d => new Date(d) > now))].sort(
+                (a, b) => new Date(a) - new Date(b)
+            );
 
-const filteredDivisions = computed(() => {
-    if (!selectedDivision.value) return props.divisions;
-    return props.divisions.filter(division => division.name === selectedDivision.value);
-});
+            if (futureDates.length > 0) {
+                pastDates.push(futureDates[0]);
+            }
 
-const filteredMatches = computed(() => {
-    if (!selectedDivision.value) return props.matches;
+            return [...new Set(pastDates)].sort((a, b) => new Date(b) - new Date(a));
+        },
 
-    let matches = props.matches.filter(match =>
-        match.home_team.division?.name === selectedDivision.value ||
-        match.away_team.division?.name === selectedDivision.value
-    );
+        filteredDivisions() {
+            if (!this.selectedDivision) return this.divisions;
+            return this.divisions.filter(division => division.name === this.selectedDivision);
+        },
 
-    if (selectedDate.value) {
-        matches = matches.filter(match => {
-            const matchDate = new Date(match.match_date).toISOString().split('T')[0];
-            return matchDate === selectedDate.value;
-        });
-    }
+        filteredMatches() {
+            if (!this.selectedDivision) return this.matches;
 
-    return matches;
-});
+            let matches = this.matches.filter(
+                match =>
+                    match.home_team.division?.name === this.selectedDivision ||
+                    match.away_team.division?.name === this.selectedDivision
+            );
+
+            if (this.selectedDate) {
+                matches = matches.filter(match => {
+                    const matchDate = new Date(match.match_date).toISOString().split('T')[0];
+                    return matchDate === this.selectedDate;
+                });
+            }
+
+            return matches;
+        },
+    },
+
+    created() {
+        usePoll(2000);
+    },
+};
 </script>
+
 
 <style scoped>
 .main-container {
@@ -234,11 +256,42 @@ const filteredMatches = computed(() => {
     font-size: 0.875rem;
 }
 
+@media (max-width: 1280px) {
+    body {
+        font-size: 18px;
+    }
+
+    .main-container {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 0 auto;
+        max-width: 100%;
+    }
+
+    .sidebar {
+        max-width: 100%;
+    }
+
+    .content {
+        max-width: 100%;
+    }
+
+    .date-filter {
+        max-width: 100%;
+    }
+
+    .standings {
+        max-width: 100%;
+    }
+
+}
 
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
-        align-items: center;
+        flex-wrap: nowrap;
+        width: 0 auto;
+        max-width: 100%;
     }
 
     .sidebar {
@@ -251,6 +304,22 @@ const filteredMatches = computed(() => {
 
     .standings {
         max-width: 100%;
+    }
+
+    .team-name,
+    td,
+    tr {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 664px) {
+
+    .col-w,
+    .col-g,
+    .col-v,
+    .col-gd {
+        display: none;
     }
 }
 </style>

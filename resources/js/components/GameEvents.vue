@@ -1,8 +1,10 @@
 <template>
     <div class="card my-6">
-        <div class="flex items-center justify-center header-title">
-            <img src="https://www.avkempen.be/assets/images/game-events/no-game-events-ball.svg" class="w-5">
-            <h2 class="card-title">Gebeurtenissen</h2>
+        <div class="flex items-center justify-around header-title">
+            <div class="flex items-center">
+                <img src="https://www.avkempen.be/assets/images/game-events/no-game-events-ball.svg" class="w-5">
+                <h2 class="card-title">Gebeurtenissen</h2>
+            </div>
         </div>
         <hr class="text-gray-200">
         <div class="p-6">
@@ -26,7 +28,7 @@
                                 :class="{ 'invisible': event.team_id !== homeTeamId }">
                                 <span v-if="event.team_id === homeTeamId" class="event-details flex items-center">
                                     <span v-if="event.event_type === 'goal'">{{ event.player_name }}</span>
-                                    <span v-else-if="event.event_type === 'substitution'">{{ event.player_out_name }} →
+                                    <span v-else-if="event.event_type === 'sub'">{{ event.player_out_name }} →
                                         {{ event.player_in_name }}</span>
                                     <span v-else-if="event.event_type === 'yellow_card'">{{ event.player_name }}</span>
                                     <span v-else-if="event.event_type === 'red_card'">{{ event.player_name }}</span>
@@ -34,7 +36,7 @@
                                         <img v-if="event.event_type === 'goal'"
                                             src="https://www.avkempen.be/assets/images/game-events/ball.svg" alt="Goal"
                                             class="icon" />
-                                        <i v-else-if="event.event_type === 'substitution'"
+                                        <i v-else-if="event.event_type === 'sub'"
                                             class="fa-solid fa-repeat text-green-500"></i>
                                         <img v-else-if="event.event_type === 'yellow_card'"
                                             src="https://www.avkempen.be/assets/images/game-events/yellow-card.png"
@@ -57,7 +59,7 @@
                                         <img v-if="event.event_type === 'goal'"
                                             src="https://www.avkempen.be/assets/images/game-events/ball.svg" alt="Goal"
                                             class="icon" />
-                                        <i v-else-if="event.event_type === 'substitution'"
+                                        <i v-else-if="event.event_type === 'sub'"
                                             class="fa-solid fa-repeat text-green-500"></i>
                                         <img v-else-if="event.event_type === 'yellow_card'"
                                             src="https://www.avkempen.be/assets/images/game-events/yellow-card.png"
@@ -67,7 +69,7 @@
                                             alt="Red Card" class="icon" />
                                     </span>
                                     <span v-if="event.event_type === 'goal'">{{ event.player_name }}</span>
-                                    <span v-else-if="event.event_type === 'substitution'">{{ event.player_out_name }} →
+                                    <span v-else-if="event.event_type === 'sub'">{{ event.player_out_name }} →
                                         {{ event.player_in_name }}</span>
                                     <span v-else-if="event.event_type === 'yellow_card'">{{ event.player_name }}</span>
                                     <span v-else-if="event.event_type === 'red_card'">{{ event.player_name }}</span>

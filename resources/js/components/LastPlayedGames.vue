@@ -142,4 +142,25 @@ export default {
     background-color: rgb(233, 233, 233);
     transition: background-color 0.2s;
 }
+
+@media (max-width: 1280px) {
+    .last-played-games {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .score {
+        font-size: 12px;
+    }
+
+    .team span {
+        font-size: 12px;
+    }
+
+    .score-number {
+        font-size: 12px;
+    }
+}
 </style>

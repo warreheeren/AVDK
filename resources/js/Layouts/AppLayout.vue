@@ -222,7 +222,6 @@ body {
     background-color: #dedede;
 }
 
-/* RESPONSIVE */
 @media (min-width: 768px) {
     .footer-content {
         flex-direction: row;
@@ -241,6 +240,7 @@ body {
         text-align: center;
         width: 100%;
     }
+
 }
 
 @media (max-width: 768px) {
@@ -251,6 +251,18 @@ body {
 
     .nav-links {
         gap: 10px;
+    }
+
+    .nav-link {
+        display: none;
+    }
+
+    .icon-link {
+        display: none;
+    }
+
+    .nav-links {
+        display: none;
     }
 }
 </style>
