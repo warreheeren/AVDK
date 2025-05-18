@@ -103,7 +103,7 @@ export default {
     padding: 16px;
     margin-top: 3rem;
     margin-bottom: 3rem;
-    height: auto;
+    height: 68vh;
     border: solid 1px #e5e7eb;
 }
 

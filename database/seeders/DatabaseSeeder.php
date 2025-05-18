@@ -72,6 +72,17 @@ class DatabaseSeeder extends Seeder
                     $homeScore = $dayIndex < $pastMatchDays ? rand(0, 5) : null;
                     $awayScore = $dayIndex < $pastMatchDays ? rand(0, 5) : null;
 
+                    $result = null;
+                    if (!is_null($homeScore) && !is_null($awayScore)) {
+                        if ($homeScore > $awayScore) {
+                            $result = 'win';
+                        } elseif ($homeScore < $awayScore) {
+                            $result = 'loss';
+                        } else {
+                            $result = 'draw';
+                        }
+                    }
+
                     $game = Game::create([
                         'home_team_id' => $homeTeam->id,
                         'away_team_id' => $awayTeam->id,
@@ -80,6 +91,7 @@ class DatabaseSeeder extends Seeder
                         'match_date' => $matchDate,
                         'location' => $homeTeam->address ?? 'Unknown',
                         'division_id' => $division->id,
+                        'result' => $result,
                     ]);
 
                     GameEvent::create([

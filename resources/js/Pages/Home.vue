@@ -49,10 +49,12 @@
                                         </td>
                                         <td class="py-3 px-4">
                                             <div class="flex items-center space-x-2">
+                                                <Link :href="`/teams/${team.id}`" class="flex items-center space-x-3">
                                                 <img :src="team.logo" alt="Team Logo" class="w-6 h-7" />
                                                 <p class="team-name hover:underline">
                                                     {{ team.name }}
                                                 </p>
+                                                </Link>
                                             </div>
                                         </td>
                                         <td class="py-3 px-4">{{ team.matches }}</td>

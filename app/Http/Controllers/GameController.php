@@ -35,7 +35,7 @@ class GameController extends Controller
                 ];
             }
 
-            $games = Game::where('division_id', $division->id)->get();
+            $games = Game::where('division_id', $division->id)->where('match_date', '<=', now())->get();
 
             foreach ($games as $gameItem) {
                 $homeTeamId = $gameItem->home_team_id;

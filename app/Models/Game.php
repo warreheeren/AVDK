@@ -9,7 +9,7 @@ class Game extends Model
 {
     use HasFactory;
      protected $fillable = [
-        'home_team_id', 'away_team_id', 'home_score', 'away_score', 'match_date', 'location'
+        'home_team_id', 'away_team_id', 'home_score', 'away_score', 'match_date', 'location', 'result'
     ];
 
     public function homeTeam() {
